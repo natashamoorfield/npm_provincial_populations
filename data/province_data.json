@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Mercia",
+        "capital_city": {
+            "name": "Maryport",
+            "base_population": 875000
+        }
+    },
+    {
+        "name": "Avon",
+        "capital_city": {
+            "name": "Willowbridge",
+            "base_population": 250000
+        }
+    },
+    {
+        "name": "Bohemia",
+        "capital_city": {
+            "name": "Prague",
+            "base_population": 1375000
+        }
+    },
+    {
+        "name": "Wessex",
+        "capital_city": {
+            "name": "Westbury",
+            "base_population": 1500000
+        }
+    },
+    {
+        "name": "Victoria",
+        "capital_city": {
+            "name": "Port Victoria",
+            "base_population": 4375000
+        }
+    },
+    {
+        "name": "Eden",
+        "capital_city": {
+            "name": "Vienna",
+            "base_population": 3250000
+        }
+    }
+]

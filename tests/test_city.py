@@ -6,12 +6,14 @@ class CityTest(unittest.TestCase):
     def setUp(self) -> None:
         self.vienna = City("Vienna")
         self.port_victoria = City("Port Victoria", 1200000)
+        self.deserted_city = City("Tumbleweed", 0)
 
-    def test_initialization(self):
+    def test_valid_initialization(self):
         self.assertEqual(self.vienna.name, "Vienna")
         self.assertIsNone(self.vienna.population)
         self.assertEqual(self.port_victoria.name, "Port Victoria")
         self.assertEqual(self.port_victoria.population, 1200000)
+        self.assertEqual(self.deserted_city.population, 0)
 
     def test_calculated_data(self):
         self.assertEqual(self.vienna.population_string, "Unknown")

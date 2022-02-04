@@ -7,6 +7,7 @@ class ThousandsSeparator(Enum):
     SPACE = ' '
     DOT = '.'
     LATEX_NB_HALF_SPACE = '\\,'
+    UNDERSCORE = "_"
 
 
 class PopulationNumber(object):

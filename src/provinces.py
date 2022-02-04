@@ -1,16 +1,63 @@
+import json
 import operator
 import numpy
-from src.numbers import PopulationList
+
+from src.city import City
+from src.numbers import PopulationDataset
+from src.population_number import PopulationNumber, ThousandsSeparator
 
 
 class Province(object):
-    def __init__(self, name: str, capital: str, population: int):
+    def __init__(self, name: str, population: int, capital_city_name: str, capital_city_population: float):
         self.name = name
-        self.capital = capital
-        self.population = population
+        self.population = PopulationNumber(population)
+        self.capital = City(capital_city_name, capital_city_population)
 
-    def __repr__(self) -> tuple:
-        return self.name, self.capital, self.population
+    def bare_data(self) -> tuple:
+        return (self.name,
+                self.population.as_string(sep=ThousandsSeparator.UNDERSCORE),
+                self.capital.name,
+                self.capital.population.as_string(sep=ThousandsSeparator.UNDERSCORE))
+
+
+class ProvincialDataset(object):
+    def __init__(self):
+        with open('data/province_data.json', 'r') as data_file:
+            self.raw_data = json.load(data_file)
+        self.population_data = PopulationDataset()
+        self.provincial_populations = self.population_data.populations
+        self.city_randomizers = self.population_data.city_randomizers
+        self.provinces = self.list_of_provinces()
+
+    def list_of_provinces(self) -> list[Province]:
+        provinces = []
+        for key, line_item in enumerate(self.raw_data):
+            capital_city_raw_data = line_item["capital_city"]
+            capital_city_name = capital_city_raw_data.get("name", "Nowheresville")
+            capital_city_population = capital_city_raw_data.get("base_population")
+            if capital_city_population:
+                capital_city_population *= self.city_randomizers[key]
+            province = Province(
+                line_item["name"],
+                self.provincial_populations[key],
+                capital_city_name,
+                capital_city_population
+            )
+            provinces.append(province)
+        return provinces
+
+    def provinces_sorted_by(self, sort_key: str, rev: bool = False) -> list[Province]:
+        """
+        Return a new list of provinces sorted on the attribute specified by sort_key, in reverse if rev is set to True.
+        """
+        keys = {
+            "population": lambda x: x.population.value,
+            "name": lambda x: x.name,
+            "capital_name": lambda x: x.capital.name,
+            "capital_population": lambda x: x.capital.population.value
+        }
+        sort_key = keys[sort_key]
+        return sorted(self.provinces, key=sort_key, reverse=rev)
 
 
 class ProvinceList(object):
@@ -30,7 +77,7 @@ class ProvinceList(object):
         self.headings = ("Province", "Capital City", "Population")
 
         # The generated population numbers.
-        self.populations = PopulationList()
+        self.populations = PopulationDataset()
 
         self.provinces = [Province(*p) for p in
                           zip(self.province_names, self.capital_cities, self.populations.populations)]
@@ -116,7 +163,7 @@ class PopulationLaTexTable(object):
         :param: province: A Province object containing the required data for the table row.
         """
         out_string = province.name + " & "
-        out_string += province.capital + " & "
+        out_string += province.capital.name + " & "
         out_string += f"{province.population:,d}"
         return out_string + "\\\\\n"
 

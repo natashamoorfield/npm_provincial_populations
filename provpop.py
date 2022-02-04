@@ -1,18 +1,16 @@
-from src.provinces import ProvinceList, PopulationLaTexTable
+from src.provinces import ProvincialDataset
+from src.plain_text_report import PlainTextReport
 
 
 class Application(object):
     def __init__(self):
-        self.provinces = ProvinceList()
+        # self.provinces = ProvinceList()
+        self.provincial_dataset = ProvincialDataset()
 
     def run(self):
-        print()
-        print(self.provinces.population_report())
-        print()
-        print(f"Interation count: {self.provinces.populations.iterations}")
-        print()
-        latex_table = PopulationLaTexTable(self.provinces)
-        print(latex_table.latex_table())
+        report = PlainTextReport(self.provincial_dataset.provinces_sorted_by("population", rev=True))
+        report.write_to_screen()
+        report.write_to_file()
 
 
 if __name__ == '__main__':

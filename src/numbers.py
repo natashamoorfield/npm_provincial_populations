@@ -1,9 +1,9 @@
 import numpy
 
 
-class PopulationList(object):
+class PopulationDataset(object):
     """
-    Class to generate a set of population figures.
+    Class to generate a population dataset.
     """
     def __init__(self):
         self.rng = numpy.random.default_rng(800)
@@ -20,6 +20,7 @@ class PopulationList(object):
             # otherwise, go back and roll the dice again...
             self.iterations += 1
         self.populations = self.actual_populations()
+        self.city_randomizers = self.rng.normal(1, 0.05, 6)
 
     def actual_populations(self) -> list[int]:
         """

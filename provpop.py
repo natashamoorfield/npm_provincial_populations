@@ -4,7 +4,6 @@ from src.plain_text_report import PlainTextReport
 
 class Application(object):
     def __init__(self):
-        # self.provinces = ProvinceList()
         self.provincial_dataset = ProvincialDataset()
 
     def run(self):

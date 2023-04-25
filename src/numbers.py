@@ -34,6 +34,7 @@ class PopulationDataset(object):
 
     @property
     def total_population(self) -> int:
+        """Return the sum total of the generated population figures."""
         return sum(self.populations)
 
     def correct_population_concentration(self) -> bool:
